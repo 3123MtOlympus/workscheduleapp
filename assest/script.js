@@ -17,18 +17,45 @@ $(function () {
         var userDescription = $(this).siblings(".description").val().trim();
         localStorage.setItem(blockId, userDescription);
       });
-    
-    
-    // TODO: Add code to apply the past, present, or future class to each time
-    // block by comparing the id to the current hour. HINTS: How can the id
-    // attribute of each time-block be used to conditionally add or remove the
-    // past, present, and future classes? How can Day.js be used to get the
-    // current hour in 24-hour time?
-    //
-    // TODO: Add code to get any user input that was saved in localStorage and set
-    // the values of the corresponding textarea elements. HINT: How can the id
-    // attribute of each time-block be used to do this?
-    //
+
+     // TODO: Add code to apply the past, present, or future class to each time block.
+  function updateHourStyles() {
+    var currentHour = dayjs().hour();
+
+    $(".time-block").each(function () {
+      var blockHour = parseInt($(this).attr("id").split("-")[1]);
+
+      // Remove previous classes
+      $(this).removeClass("past present future");
+
+      // Add the appropriate class based on the comparison with the current hour
+      if (blockHour < currentHour) {
+        $(this).addClass("past");
+      } else if (blockHour === currentHour) {
+        $(this).addClass("present");
+      } else {
+        $(this).addClass("future");
+      }
+    });
+  }
+ 
+// Call the function to initially set the time-block styles
+updateHourStyles();
+
+// TODO: Add code to get any user input saved in localStorage and set the values of corresponding textarea elements.
+function loadSavedData() {
+  $(".time-block").each(function () {
+    var blockId = $(this).attr("id");
+    var savedData = localStorage.getItem(blockId);
+
+    // Update the textarea with the saved data
+    $(this).find(".description").val(savedData);
+  });
+}
+
+// Call the function to load saved data on page load
+loadSavedData();
+
     // TODO: Add code to display the current date in the header of the page.
   });
   
